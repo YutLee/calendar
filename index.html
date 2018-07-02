@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta name="viewport" content="width=device-width,minimum-scale=1,maximum-scale=1,user-scalable=no">
+</head>
+<body>
+	<script type="text/javascript">
+		const currentDate = new Date()
+    const year = currentDate.getFullYear() // 以四位数字返回年份
+    const month = currentDate.getMonth() // 返回月份 (0 ~ 11)
+    const day = currentDate.getDay() // 返回一周中的某一天 (0 ~ 6)
+    const date = currentDate.getDate() // 返回一个月中的某一天 (1 ~ 31)
+
+    // 获取当前月份天数
+    const getMonthDays = (date) => {
+      const currentDate = new Date(date)
+      const year = currentDate.getFullYear() // 以四位数字返回年份
+      const month = currentDate.getMonth() // 返回月份 (0 ~ 11)
+      const isLeapYear = year % 400 === 0 || (year % 4 === 0 && year % 100 !== 0)
+
+      return month === 2 ? (isLeapYear ? 29 : 28) : (/^(0|2|4|6|7|9|11)$/.test(month) ? 31 : 30)
+    }
+
+    // 获取上个月占用当前月份天数
+    const getPrevMonthDays = (date) => {
+    	const currentDate = new Date(date)
+	    const firstDate = new Date(currentDate.setDate(1))
+	    return firstDate.getDay() === 0 ? 6 : firstDate.getDay() - 1
+    }
+
+    // 获取下个月占用当前月份天数
+    const getNextMonthDays = (date) => {
+    	const currentDate = new Date(date)
+	    const lastDate = new Date(currentDate.setDate(getMonthDays(currentDate)))
+	    return lastDate.getDay() === 0 ? 0 : 7 - lastDate.getDay()
+	  }
+
+    console.log(getPrevMonthDays(currentDate), getNextMonthDays(currentDate))
+	</script>
+</body>
+</html>
