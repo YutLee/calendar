@@ -21,21 +21,67 @@
       return month === 2 ? (isLeapYear ? 29 : 28) : (/^(0|2|4|6|7|9|11)$/.test(month) ? 31 : 30)
     }
 
-    // 获取上个月占用当前月份天数
+    // 获取上个月占用当前月份天数数组
     const getPrevMonthDays = (date) => {
     	const currentDate = new Date(date)
 	    const firstDate = new Date(currentDate.setDate(1))
-	    return firstDate.getDay() === 0 ? 6 : firstDate.getDay() - 1
+	    const firstDays = firstDate.getDay() === 0 ? 6 : firstDate.getDay() - 1
+	    const month = currentDate.getMonth()
+	    if (month === 0) {
+	    	currentDate.setFullYear(currentDate.getFullYear() - 1)
+	    	currentDate.setMonth(11)
+	    } else {
+	    	currentDate.setMonth(month - 1)
+	    }
+	    const prevDate = getMonthDays(currentDate)
+	    const prevYear = currentDate.getFullYear()
+	    const prevMonth = currentDate.getMonth()
+	    let prevDaysArr = []
+
+	    for (let i = firstDays - 1; i >= 0; i--) {
+	    	prevDaysArr.push({year: prevYear, month: prevMonth, date: prevDate - i})
+	    }
+	    return prevDaysArr
     }
 
-    // 获取下个月占用当前月份天数
+    // 获取下个月占用当前月份天数数组
     const getNextMonthDays = (date) => {
     	const currentDate = new Date(date)
 	    const lastDate = new Date(currentDate.setDate(getMonthDays(currentDate)))
-	    return lastDate.getDay() === 0 ? 0 : 7 - lastDate.getDay()
+	    const nextDays = lastDate.getDay() === 0 ? 0 : 7 - lastDate.getDay()
+	    const month = currentDate.getMonth()
+	    if (month === 11) {
+	    	currentDate.setFullYear(currentDate.getFullYear() + 1)
+	    	currentDate.setMonth(0)
+	    } else {
+	    	currentDate.setMonth(month + 1)
+	    }
+	    const nextYear = currentDate.getFullYear()
+	    const nextMonth = currentDate.getMonth()
+	    let nextDaysArr = []
+
+	    for (let i = 1; i <= nextDays; i++) {
+	    	nextDaysArr.push({year: nextYear, month: nextMonth, day: i})
+	    }
+	    return nextDaysArr
 	  }
 
-    console.log(getPrevMonthDays(currentDate), getNextMonthDays(currentDate))
+	  // 获取当前月天数数组
+    const getCurrentMonthDays = (date) => {
+    	const currentDate = new Date(date)
+	    const days = getMonthDays(currentDate)
+	    const year = currentDate.getFullYear()
+	    const month = currentDate.getMonth()
+	    let daysArr = []
+
+	    for (let i = 1; i <= days; i++) {
+	    	daysArr.push({year: year, month: month, day: i})
+	    }
+	    return daysArr
+	  }
+
+    const days = [...getPrevMonthDays(currentDate), ...getCurrentMonthDays(currentDate), ...getNextMonthDays(currentDate)]
+    console.log(days)
 	</script>
 </body>
 </html>
